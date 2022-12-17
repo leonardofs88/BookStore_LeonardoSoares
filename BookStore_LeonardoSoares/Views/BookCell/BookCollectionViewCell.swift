@@ -17,6 +17,7 @@ class BookCollectionViewCell: UICollectionViewCell {
     
     override class func awakeFromNib() {
         super.awakeFromNib()
+        
     }
     
 }
