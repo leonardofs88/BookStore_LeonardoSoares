@@ -17,11 +17,18 @@
 		982BF8D1294DFE0000984318 /* RetailPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982BF8D0294DFE0000984318 /* RetailPrice.swift */; };
 		982BF8DB294E1EBC00984318 /* BookCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982BF8DA294E1EBC00984318 /* BookCollectionViewCell.swift */; };
 		982BF8DD294E1ECD00984318 /* BookCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 982BF8DC294E1ECD00984318 /* BookCollectionViewCell.xib */; };
+		98325406294E54B400DE6CFD /* BookStoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98325405294E54B400DE6CFD /* BookStoreService.swift */; };
+		9832540A294E638600DE6CFD /* BookLargeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98325409294E638600DE6CFD /* BookLargeCollectionViewCell.swift */; };
+		9832540C294E63EF00DE6CFD /* BookLargeCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9832540B294E63EF00DE6CFD /* BookLargeCollectionViewCell.xib */; };
 		9839EBE9294D24A5000B411D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9839EBE8294D24A5000B411D /* AppDelegate.swift */; };
 		9839EBEB294D24A5000B411D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9839EBEA294D24A5000B411D /* SceneDelegate.swift */; };
 		9839EBF0294D24A5000B411D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9839EBEE294D24A5000B411D /* Main.storyboard */; };
 		9839EBF2294D24A7000B411D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9839EBF1294D24A7000B411D /* Assets.xcassets */; };
 		9839EBF5294D24A7000B411D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9839EBF3294D24A7000B411D /* LaunchScreen.storyboard */; };
+		988B46DB294F34DA0062B855 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988B46DA294F34DA0062B855 /* Endpoint.swift */; };
+		988B46DF294F3CDF0062B855 /* MainShelfViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988B46DE294F3CDF0062B855 /* MainShelfViewModel.swift */; };
+		988B46E1294F48C70062B855 /* VolumeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988B46E0294F48C70062B855 /* VolumeInfo.swift */; };
+		98A6ED50294F300C0077CD28 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98A6ED4F294F300C0077CD28 /* Config.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +42,9 @@
 		982BF8D0294DFE0000984318 /* RetailPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetailPrice.swift; sourceTree = "<group>"; };
 		982BF8DA294E1EBC00984318 /* BookCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCollectionViewCell.swift; sourceTree = "<group>"; };
 		982BF8DC294E1ECD00984318 /* BookCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BookCollectionViewCell.xib; sourceTree = "<group>"; };
+		98325405294E54B400DE6CFD /* BookStoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoreService.swift; sourceTree = "<group>"; };
+		98325409294E638600DE6CFD /* BookLargeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookLargeCollectionViewCell.swift; sourceTree = "<group>"; };
+		9832540B294E63EF00DE6CFD /* BookLargeCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BookLargeCollectionViewCell.xib; sourceTree = "<group>"; };
 		9839EBE5294D24A5000B411D /* BookStore_LeonardoSoares.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookStore_LeonardoSoares.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9839EBE8294D24A5000B411D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9839EBEA294D24A5000B411D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -42,6 +52,10 @@
 		9839EBF1294D24A7000B411D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9839EBF4294D24A7000B411D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9839EBF6294D24A7000B411D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		988B46DA294F34DA0062B855 /* Endpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		988B46DE294F3CDF0062B855 /* MainShelfViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainShelfViewModel.swift; sourceTree = "<group>"; };
+		988B46E0294F48C70062B855 /* VolumeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeInfo.swift; sourceTree = "<group>"; };
+		98A6ED4F294F300C0077CD28 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +72,7 @@
 		982BF8B9294DE89500984318 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				988B46DE294F3CDF0062B855 /* MainShelfViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -69,6 +84,7 @@
 				982BF8CB294DFC9F00984318 /* ImageLinks.swift */,
 				982BF8CE294DFD0A00984318 /* SaleInfo.swift */,
 				982BF8D0294DFE0000984318 /* RetailPrice.swift */,
+				988B46E0294F48C70062B855 /* VolumeInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -90,8 +106,19 @@
 			children = (
 				982BF8DA294E1EBC00984318 /* BookCollectionViewCell.swift */,
 				982BF8DC294E1ECD00984318 /* BookCollectionViewCell.xib */,
+				98325409294E638600DE6CFD /* BookLargeCollectionViewCell.swift */,
+				9832540B294E63EF00DE6CFD /* BookLargeCollectionViewCell.xib */,
 			);
 			path = BookCell;
+			sourceTree = "<group>";
+		};
+		98325404294E534500DE6CFD /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				98325405294E54B400DE6CFD /* BookStoreService.swift */,
+				988B46DA294F34DA0062B855 /* Endpoint.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 		9839EBDC294D24A5000B411D = {
@@ -114,6 +141,7 @@
 		9839EBE7294D24A5000B411D /* BookStore_LeonardoSoares */ = {
 			isa = PBXGroup;
 			children = (
+				98325404294E534500DE6CFD /* Service */,
 				982BF8BB294DE8AF00984318 /* Views */,
 				982BF8BA294DE8A000984318 /* Models */,
 				982BF8B9294DE89500984318 /* ViewModels */,
@@ -122,6 +150,7 @@
 				9839EBF1294D24A7000B411D /* Assets.xcassets */,
 				9839EBF3294D24A7000B411D /* LaunchScreen.storyboard */,
 				9839EBF6294D24A7000B411D /* Info.plist */,
+				98A6ED4F294F300C0077CD28 /* Config.swift */,
 			);
 			path = BookStore_LeonardoSoares;
 			sourceTree = "<group>";
@@ -188,6 +217,7 @@
 				982BF8DD294E1ECD00984318 /* BookCollectionViewCell.xib in Resources */,
 				9839EBF2294D24A7000B411D /* Assets.xcassets in Resources */,
 				982BF8C1294DF4C800984318 /* BookDetail.storyboard in Resources */,
+				9832540C294E63EF00DE6CFD /* BookLargeCollectionViewCell.xib in Resources */,
 				982BF8CA294DFA3600984318 /* Config.xcconfig in Resources */,
 				9839EBF0294D24A5000B411D /* Main.storyboard in Resources */,
 			);
@@ -200,14 +230,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98325406294E54B400DE6CFD /* BookStoreService.swift in Sources */,
 				9839EBE9294D24A5000B411D /* AppDelegate.swift in Sources */,
 				982BF8CF294DFD0A00984318 /* SaleInfo.swift in Sources */,
+				988B46DB294F34DA0062B855 /* Endpoint.swift in Sources */,
 				982BF8D1294DFE0000984318 /* RetailPrice.swift in Sources */,
 				982BF8DB294E1EBC00984318 /* BookCollectionViewCell.swift in Sources */,
+				9832540A294E638600DE6CFD /* BookLargeCollectionViewCell.swift in Sources */,
+				98A6ED50294F300C0077CD28 /* Config.swift in Sources */,
+				988B46E1294F48C70062B855 /* VolumeInfo.swift in Sources */,
 				982BF8C8294DF62F00984318 /* Book.swift in Sources */,
 				982BF8BD294DE91700984318 /* MainShelfViewController.swift in Sources */,
 				982BF8BF294DF48700984318 /* BookDetailViewController.swift in Sources */,
 				9839EBEB294D24A5000B411D /* SceneDelegate.swift in Sources */,
+				988B46DF294F3CDF0062B855 /* MainShelfViewModel.swift in Sources */,
 				982BF8CC294DFC9F00984318 /* ImageLinks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -363,8 +399,8 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -393,8 +429,8 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
