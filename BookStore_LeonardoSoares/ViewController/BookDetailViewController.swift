@@ -46,6 +46,11 @@ class BookDetailViewController: UIViewController {
 extension BookDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        if let link = viewModel?.book?.saleInfo?.buyLink,
+           let url = URL(string: link),
+           indexPath.row == 3 {
+            UIApplication.shared.open(url)
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
