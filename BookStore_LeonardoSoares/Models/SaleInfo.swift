@@ -10,6 +10,7 @@ import Foundation
 enum Saleability: String, Codable {
     case available = "FOR_SALE"
     case notAvailable = "NOT_FOR_SALE"
+    case free = "FREE"
 }
 
 struct SaleInfo: Codable {

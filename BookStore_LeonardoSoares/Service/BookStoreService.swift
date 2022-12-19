@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import UIKit
 
-struct Result: Codable {
+struct GatheredData: Codable {
     let items: [Book]
 }
 
 class BookStoreService {
-    public func getShelfData(at index: Int) {
+    public func getShelfData(at index: Int, result: @escaping (Result<[Book], Error>) -> ()) {
         let queryItems: [URLQueryItem] = [
             URLQueryItem(name: "q", value: "ios"),
             URLQueryItem(name: "maxResults", value: "20"),
@@ -30,15 +31,26 @@ class BookStoreService {
                 guard let data = data else { return }
                 
                 do {
-                    let results = try JSONDecoder().decode(Result.self, from: data)
-                    print(results)
+                    let results = try JSONDecoder().decode(GatheredData.self, from: data)
+                    result(.success(results.items))
                 } catch {
-                    print(error)
+                    result(.failure(error))
                 }
-                print(String(data: data, encoding: .utf8) ?? "Invalid JSON")
             }.resume()
         }
     }
+    
+    func getImage(from url: URL, results: @escaping (Result<UIImage, Error>) -> ()) {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let imageData = data, let result =  UIImage(data: imageData) {
+                    results(.success(result))
+                }
+                
+                if let err = error {
+                    results(.failure(err))
+                }
+            }.resume()
+        }
     
     private func buildURL(for path: Path, with queryItems: [URLQueryItem]) -> URL? {
         Endpoint(path: path, queryItems: queryItems).builtUrl

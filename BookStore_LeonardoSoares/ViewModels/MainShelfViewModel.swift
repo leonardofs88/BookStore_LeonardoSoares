@@ -6,16 +6,56 @@
 //
 
 import Foundation
+import UIKit
 
-class MainShelfViewModel {
-    
-    fileprivate let service: BookStoreService
-    
-    init(service: BookStoreService) {
-        self.service = service
+class MainShelfViewModel: BaseViewModel {
+    fileprivate var dataSource: [[Book]]? {
+        didSet {
+            if let count = dataSource?.count {
+                self.numberOfSections = count / 2
+            }
+        }
     }
     
-    internal func loadData(block: () -> ()) {
-        self.service.getShelfData(at: 0)
+    fileprivate var paginationIndex: Int = 0
+    internal var numberOfSections: Int = 0
+    
+    override init(service: BookStoreService) {
+        self.dataSource = []
+        super.init(service: service)
+    }
+    
+    internal func getBook(for indexPath: IndexPath) -> Book? {
+        self.dataSource?[indexPath.section][indexPath.row]
+    }
+    
+    internal func loadData(block: @escaping () -> ()) {
+        self.service.getShelfData(at: self.paginationIndex) { [weak self] result in
+            switch result {
+            case .success(let books):
+                self?.configureShelf(books: books)
+                self?.paginationIndex += 20
+                block()
+            case .failure(let error):
+                print(error)
+                
+            }
+        }
+    }
+    
+    fileprivate func configureShelf(books: [Book]) {
+        var shelf: [[Book]] = []
+        var currentSectionBooks: [Book] = []
+        
+        books.forEach { book in
+            currentSectionBooks.append(book)
+            if currentSectionBooks.count == 2 {
+                shelf.append(currentSectionBooks)
+                currentSectionBooks = []
+            }
+        }
+        
+        self.dataSource?.append(contentsOf: shelf)
+        
     }
 }

@@ -10,5 +10,5 @@ import Foundation
 struct Book: Codable {
     let volumeInfo: VolumeInfo
     let shopURL: String?
-    let saleInfo: SaleInfo
+    let saleInfo: SaleInfo?
 }

@@ -17,7 +17,12 @@ class BookCollectionViewCell: UICollectionViewCell {
     
     override class func awakeFromNib() {
         super.awakeFromNib()
-        
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.imageView.image = UIImage.init(systemName: "text.book.closed")
+        self.titleLabel.text = ""
     }
     
 }

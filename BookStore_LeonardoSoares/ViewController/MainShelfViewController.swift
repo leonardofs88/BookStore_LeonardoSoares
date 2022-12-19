@@ -7,12 +7,13 @@
 
 import Foundation
 import UIKit
+import SwiftSpinner
 
 class MainShelfViewController: UICollectionViewController {
-    
-    fileprivate var dataSource: [Book]?
+
     // In a more complex code, this instatiation can be moved into an App Container (Singleton)
     fileprivate lazy var viewModel: MainShelfViewModel = MainShelfViewModel(service: BookStoreService())
+    fileprivate var isLoading = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,22 +30,20 @@ class MainShelfViewController: UICollectionViewController {
     }
     
     fileprivate func loadData() {
+        SwiftSpinner.show("Loading")
+        self.isLoading = true
         self.viewModel.loadData() {
-            
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.reloadData()
+                self?.isLoading = false
+                SwiftSpinner.hide()
+            }
         }
     }
-    
-    fileprivate func getNumberOfSections() -> Int {
-        if let numberOfItems = dataSource?.count {
-            return numberOfItems/2
-        }
-        return 0
-    }
-    
     /// Mark: Collection View Delegate
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        dataSource?.count ?? 0
+        2
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -53,11 +52,29 @@ class MainShelfViewController: UICollectionViewController {
         switch UIDevice.current.userInterfaceIdiom {
         case .phone:
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCollectionViewCell.identifier, for: indexPath) as? BookCollectionViewCell {
+                if let thumbURL = self.viewModel.getBook(for: indexPath)?.volumeInfo.imageLinks?.smallThumbnail,
+                let URL = URL(string: thumbURL.replacingOccurrences(of: "http", with: "https")) {
+                    self.viewModel.getImage(from: URL) { image in
+                        DispatchQueue.main.async {
+                            cell.imageView.image = image
+                        }
+                    }
+                }
+                cell.titleLabel.text = self.viewModel.getBook(for: indexPath)?.volumeInfo.title
                 return cell
             }
             
         default:
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookLargeCollectionViewCell.identifier, for: indexPath) as? BookLargeCollectionViewCell {
+                if let thumbURL = self.viewModel.getBook(for: indexPath)?.volumeInfo.imageLinks?.smallThumbnail,
+                let URL = URL(string: thumbURL.replacingOccurrences(of: "http", with: "https")) {
+                    self.viewModel.getImage(from: URL) { image in
+                        DispatchQueue.main.async {
+                            cell.imageView.image = image
+                        }
+                    }
+                }
+                cell.titleLabel.text = self.viewModel.getBook(for: indexPath)?.volumeInfo.title
                 return cell
             }
         }
@@ -66,6 +83,18 @@ class MainShelfViewController: UICollectionViewController {
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        self.getNumberOfSections()
+        self.viewModel.numberOfSections
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.section == self.viewModel.numberOfSections - 1, !isLoading {
+            self.loadData()
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? BookDetailViewController {
+            
+        }
     }
 }
