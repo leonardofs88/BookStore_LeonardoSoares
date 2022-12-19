@@ -20,4 +20,10 @@ class BookLargeCollectionViewCell: UICollectionViewCell {
         
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.imageView.image = UIImage.init(systemName: "text.book.closed")
+        self.titleLabel.text = ""
+    }
+    
 }

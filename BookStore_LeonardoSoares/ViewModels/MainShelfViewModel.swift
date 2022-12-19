@@ -43,6 +43,14 @@ class MainShelfViewModel: BaseViewModel {
         }
     }
     
+    internal func buildViewController(for indexPath: IndexPath) -> BookDetailViewController? {
+        guard let book = dataSource?[indexPath.section][indexPath.row] else { return nil }
+        let storyboard = UIStoryboard(name: "BookDetailViewController", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "BookDetailViewController") as? BookDetailViewController
+        viewController?.viewModel = BookDetailViewModel(book: book, service: self.service)
+        return viewController
+    }
+    
     fileprivate func configureShelf(books: [Book]) {
         var shelf: [[Book]] = []
         var currentSectionBooks: [Book] = []

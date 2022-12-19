@@ -92,9 +92,9 @@ class MainShelfViewController: UICollectionViewController {
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let vc = segue.destination as? BookDetailViewController {
-            
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let vc = self.viewModel.buildViewController(for: indexPath) {
+            self.navigationController?.present(vc, animated: true)
         }
     }
 }

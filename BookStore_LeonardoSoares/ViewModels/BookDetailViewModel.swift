@@ -10,14 +10,14 @@ import UIKit
 
 class BookDetailViewModel: BaseViewModel {
     
-    fileprivate let book: Book
+    public let book: Book?
     
     init(book: Book, service: BookStoreService) {
         self.book = book
         super.init(service: service)
     }
     
-    internal func loadDetails() -> Book {
+    internal func loadDetails() -> Book? {
         return self.book
     }
     
