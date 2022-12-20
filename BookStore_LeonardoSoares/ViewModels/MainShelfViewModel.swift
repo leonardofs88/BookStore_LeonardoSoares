@@ -12,12 +12,13 @@ class MainShelfViewModel: BaseViewModel {
     fileprivate var dataSource: [[Book]]? {
         didSet {
             if let count = dataSource?.count {
-                self.numberOfSections = count / 2
+                self.numberOfSections = count > 2 ? count / 2 : count
             }
         }
     }
     
     fileprivate var paginationIndex: Int = 0
+    fileprivate var filterPaginationIndex: Int = 0
      var numberOfSections: Int = 0
     
     override init(service: BookStoreService) {
@@ -29,12 +30,13 @@ class MainShelfViewModel: BaseViewModel {
         self.dataSource?[indexPath.section][indexPath.row]
     }
     
-     func loadData(block: @escaping () -> ()) {
+    func loadData(block: @escaping () -> ()) {
         self.service.getShelfData(at: self.paginationIndex) { [weak self] result in
             switch result {
             case .success(let books):
                 self?.configureShelf(books: books)
                 self?.paginationIndex += 20
+                self?.filterPaginationIndex = 0
                 block()
             case .failure(let error):
                 print(error)
@@ -62,8 +64,40 @@ class MainShelfViewModel: BaseViewModel {
                 currentSectionBooks = []
             }
         }
+        if self.paginationIndex > 0 {
+            self.dataSource?.append(contentsOf: shelf)
+        } else {
+            self.dataSource = shelf
+        }
+    }
+    
+    fileprivate func configureFilteredShelf(books: [Book]) {
+        var shelf: [[Book]] = []
+        var currentSectionBooks: [Book] = []
+        let filteredBooks = books.filter { $0.isFav == true }
         
-        self.dataSource?.append(contentsOf: shelf)
+        filteredBooks.forEach { book in
+            currentSectionBooks.append(book)
+            if currentSectionBooks.count == 2 {
+                shelf.append(currentSectionBooks)
+                currentSectionBooks = []
+            }
+        }
         
+        self.dataSource = shelf
+    }
+    
+    func filterFavorites(block: @escaping () -> ()) {
+        self.service.getShelfData(at: self.filterPaginationIndex) { [weak self] result in
+            switch result {
+            case .success(let books):
+                self?.configureFilteredShelf(books: books)
+                self?.filterPaginationIndex += 20
+                self?.paginationIndex = 0
+                block()
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }

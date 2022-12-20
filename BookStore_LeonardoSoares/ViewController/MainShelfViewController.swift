@@ -14,6 +14,7 @@ class MainShelfViewController: UICollectionViewController {
     // In a more complex code, this instatiation can be moved into an App Container (Singleton)
     fileprivate lazy var viewModel: MainShelfViewModel = MainShelfViewModel(service: BookStoreService())
     fileprivate var isLoading = false
+    fileprivate var isFilterActive = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,14 +34,31 @@ class MainShelfViewController: UICollectionViewController {
     fileprivate func loadData() {
         SwiftSpinner.show("Loading")
         self.isLoading = true
-        self.viewModel.loadData() {
-            DispatchQueue.main.async { [weak self] in
+        self.viewModel.loadData() { [weak self] in
+            DispatchQueue.main.async {
                 self?.collectionView.reloadData()
                 self?.isLoading = false
                 SwiftSpinner.hide()
             }
         }
     }
+    
+    @IBAction func favorite(_ sender: Any) {
+        if !isFilterActive {
+            isFilterActive = true
+            SwiftSpinner.show("Loading")
+            viewModel.filterFavorites() { [weak self] in
+                DispatchQueue.main.async {
+                    self?.collectionView.reloadData()
+                    SwiftSpinner.hide()
+                }
+            }
+        } else {
+            isFilterActive = false
+            loadData()
+        }
+    }
+    
     /// Mark: Collection View Delegate
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -98,7 +116,7 @@ class MainShelfViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.section == self.viewModel.numberOfSections - 1, !isLoading {
+        if indexPath.section == self.viewModel.numberOfSections - 1, !isLoading, !isFilterActive {
             self.loadData()
         }
     }
