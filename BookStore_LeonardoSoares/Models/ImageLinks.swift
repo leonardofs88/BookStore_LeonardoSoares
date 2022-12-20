@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ImageLinks: Codable {
+struct ImageLinks: Codable, Equatable {
     let smallThumbnail: String
     let thumbnail: String
 }

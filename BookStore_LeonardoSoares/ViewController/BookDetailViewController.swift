@@ -120,7 +120,7 @@ extension BookDetailViewController: UITableViewDataSource {
             case .free:
                 saleability = "Buy for free"
             default:
-                saleability = "Not available"
+                saleability = "Not available to buy"
                 detail = ""
             }
             

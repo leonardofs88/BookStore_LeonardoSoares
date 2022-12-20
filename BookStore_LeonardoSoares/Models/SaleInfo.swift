@@ -7,13 +7,13 @@
 
 import Foundation
 
-enum Saleability: String, Codable {
+enum Saleability: String, Codable, Equatable {
     case available = "FOR_SALE"
     case notAvailable = "NOT_FOR_SALE"
     case free = "FREE"
 }
 
-struct SaleInfo: Codable {
+struct SaleInfo: Codable, Equatable {
     let country: String
     let saleability: Saleability
     let isEbook: Bool

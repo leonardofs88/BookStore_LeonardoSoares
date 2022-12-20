@@ -13,8 +13,11 @@ class MainShelfViewController: UICollectionViewController {
     
     // In a more complex code, this instatiation can be moved into an App Container (Singleton)
     fileprivate lazy var viewModel: MainShelfViewModel = MainShelfViewModel(service: BookStoreService())
-    fileprivate var isLoading = false
-    fileprivate var isFilterActive = false
+    fileprivate var isLoading: Bool = false
+    fileprivate var isFilterActive: Bool = false
+    fileprivate var paginationIndex: Int = 0
+    
+    @IBOutlet weak var favButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,9 +37,10 @@ class MainShelfViewController: UICollectionViewController {
     fileprivate func loadData() {
         SwiftSpinner.show("Loading")
         self.isLoading = true
-        self.viewModel.loadData() { [weak self] in
+        self.viewModel.loadData(pagination: paginationIndex) { [weak self] in
             DispatchQueue.main.async {
                 self?.collectionView.reloadData()
+                self?.paginationIndex += 20
                 self?.isLoading = false
                 SwiftSpinner.hide()
             }
@@ -46,15 +50,20 @@ class MainShelfViewController: UICollectionViewController {
     @IBAction func favorite(_ sender: Any) {
         if !isFilterActive {
             isFilterActive = true
+            paginationIndex = 0
             SwiftSpinner.show("Loading")
-            viewModel.filterFavorites() { [weak self] in
+            viewModel.filterFavorites(pagination: paginationIndex) { [weak self] in
                 DispatchQueue.main.async {
                     self?.collectionView.reloadData()
+                    self?.favButton.title = "Clear Filter"
+                    self?.favButton.image = nil
                     SwiftSpinner.hide()
                 }
             }
         } else {
             isFilterActive = false
+            self.favButton.title = nil
+            self.favButton.image = UIImage(systemName: "heart.fill")
             loadData()
         }
     }
@@ -62,7 +71,11 @@ class MainShelfViewController: UICollectionViewController {
     /// Mark: Collection View Delegate
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        2
+        if section == (viewModel.numberOfSections - 1) {
+           return viewModel.numberOfItems % 2 == 0 ? 2 : 1
+        }
+        
+        return 2
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -81,7 +94,12 @@ class MainShelfViewController: UICollectionViewController {
                 }
                 
                 if let isFav = self.viewModel.getBook(for: indexPath)?.isFav {
-                    cell.favoriteButton.setImage(UIImage(systemName: "heart\(isFav ? ".fill" : "")"), for: .normal)
+                    if isFav {
+                        cell.favoriteButton.isHidden = false
+                        cell.favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                    } else {
+                        cell.favoriteButton.isHidden = true
+                    }
                 }
                 
                 cell.titleLabel.text = self.viewModel.getBook(for: indexPath)?.volumeInfo.title
@@ -100,7 +118,12 @@ class MainShelfViewController: UICollectionViewController {
                 }
                 
                 if let isFav = self.viewModel.getBook(for: indexPath)?.isFav {
-                    cell.favoriteButton.setImage(UIImage(systemName: "heart\(isFav ? ".fill" : "")"), for: .normal)
+                    if isFav {
+                        cell.favoriteButton.isHidden = false
+                        cell.favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                    } else {
+                        cell.favoriteButton.isHidden = true
+                    }
                 }
                 
                 cell.titleLabel.text = self.viewModel.getBook(for: indexPath)?.volumeInfo.title

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct VolumeInfo: Codable {
+struct VolumeInfo: Codable, Equatable {
     let title: String
     let authors: [String]?
     let description: String?
