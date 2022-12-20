@@ -18,18 +18,18 @@ class MainShelfViewModel: BaseViewModel {
     }
     
     fileprivate var paginationIndex: Int = 0
-    internal var numberOfSections: Int = 0
+     var numberOfSections: Int = 0
     
     override init(service: BookStoreService) {
         self.dataSource = []
         super.init(service: service)
     }
     
-    internal func getBook(for indexPath: IndexPath) -> Book? {
+     func getBook(for indexPath: IndexPath) -> Book? {
         self.dataSource?[indexPath.section][indexPath.row]
     }
     
-    internal func loadData(block: @escaping () -> ()) {
+     func loadData(block: @escaping () -> ()) {
         self.service.getShelfData(at: self.paginationIndex) { [weak self] result in
             switch result {
             case .success(let books):
@@ -43,7 +43,7 @@ class MainShelfViewModel: BaseViewModel {
         }
     }
     
-    internal func buildViewController(for indexPath: IndexPath) -> BookDetailViewController? {
+     func buildViewController(for indexPath: IndexPath) -> BookDetailViewController? {
         guard let book = dataSource?[indexPath.section][indexPath.row] else { return nil }
         let storyboard = UIStoryboard(name: "BookDetailViewController", bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: "BookDetailViewController") as? BookDetailViewController

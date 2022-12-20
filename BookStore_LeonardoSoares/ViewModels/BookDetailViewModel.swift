@@ -17,7 +17,7 @@ class BookDetailViewModel: BaseViewModel {
         super.init(service: service)
     }
     
-    internal func loadDetails() -> Book? {
+     func loadDetails() -> Book? {
         return self.book
     }
     

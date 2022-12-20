@@ -10,7 +10,7 @@ import UIKit
 import SwiftSpinner
 
 class MainShelfViewController: UICollectionViewController {
-
+    
     // In a more complex code, this instatiation can be moved into an App Container (Singleton)
     fileprivate lazy var viewModel: MainShelfViewModel = MainShelfViewModel(service: BookStoreService())
     fileprivate var isLoading = false
@@ -28,6 +28,7 @@ class MainShelfViewController: UICollectionViewController {
         
         self.loadData()
     }
+    
     
     fileprivate func loadData() {
         SwiftSpinner.show("Loading")
@@ -53,13 +54,18 @@ class MainShelfViewController: UICollectionViewController {
         case .phone:
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCollectionViewCell.identifier, for: indexPath) as? BookCollectionViewCell {
                 if let thumbURL = self.viewModel.getBook(for: indexPath)?.volumeInfo.imageLinks?.smallThumbnail,
-                let URL = URL(string: thumbURL.replacingOccurrences(of: "http", with: "https")) {
+                   let URL = URL(string: thumbURL.replacingOccurrences(of: "http", with: "https")) {
                     self.viewModel.getImage(from: URL) { image in
                         DispatchQueue.main.async {
                             cell.imageView.image = image
                         }
                     }
                 }
+                
+                if let isFav = self.viewModel.getBook(for: indexPath)?.isFav {
+                    cell.favoriteButton.setImage(UIImage(systemName: "heart\(isFav ? ".fill" : "")"), for: .normal)
+                }
+                
                 cell.titleLabel.text = self.viewModel.getBook(for: indexPath)?.volumeInfo.title
                 return cell
             }
@@ -67,13 +73,18 @@ class MainShelfViewController: UICollectionViewController {
         default:
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookLargeCollectionViewCell.identifier, for: indexPath) as? BookLargeCollectionViewCell {
                 if let thumbURL = self.viewModel.getBook(for: indexPath)?.volumeInfo.imageLinks?.smallThumbnail,
-                let URL = URL(string: thumbURL.replacingOccurrences(of: "http", with: "https")) {
+                   let URL = URL(string: thumbURL.replacingOccurrences(of: "http", with: "https")) {
                     self.viewModel.getImage(from: URL) { image in
                         DispatchQueue.main.async {
                             cell.imageView.image = image
                         }
                     }
                 }
+                
+                if let isFav = self.viewModel.getBook(for: indexPath)?.isFav {
+                    cell.favoriteButton.setImage(UIImage(systemName: "heart\(isFav ? ".fill" : "")"), for: .normal)
+                }
+                
                 cell.titleLabel.text = self.viewModel.getBook(for: indexPath)?.volumeInfo.title
                 return cell
             }
@@ -94,7 +105,14 @@ class MainShelfViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let vc = self.viewModel.buildViewController(for: indexPath) {
+            vc.delegate = self
             self.navigationController?.present(vc, animated: true)
         }
+    }
+}
+
+extension MainShelfViewController: FavButtonDelegate {
+    func favoritedAction() {
+        collectionView.reloadData()
     }
 }

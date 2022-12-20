@@ -8,7 +8,12 @@
 import Foundation
 
 struct Book: Codable {
+    let id: String
     let volumeInfo: VolumeInfo
     let shopURL: String?
     let saleInfo: SaleInfo?
+    
+    var isFav: Bool {
+        UserDefaults.standard.bool(forKey: id)
+    }
 }

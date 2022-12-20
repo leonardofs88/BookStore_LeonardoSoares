@@ -16,7 +16,7 @@ class BaseViewModel {
         self.service = service
     }
     
-    internal func getImage(from URL: URL, block: @escaping (UIImage) -> () ){
+     func getImage(from URL: URL, block: @escaping (UIImage) -> () ){
         self.service.getImage(from: URL) { result in
             switch result {
             case .success(let image):

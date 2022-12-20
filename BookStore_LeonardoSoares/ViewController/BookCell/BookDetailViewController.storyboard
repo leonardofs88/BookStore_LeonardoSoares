@@ -36,16 +36,16 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" id="ZTv-xO-Idf">
-                                                    <rect key="frame" x="20" y="15" width="25" height="14.333333333333334"/>
+                                                    <rect key="frame" x="20" y="13" width="30" height="18"/>
                                                     <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5bY-s1-z2t">
-                                                    <rect key="frame" x="297.33333333333331" y="15" width="43.666666666666664" height="14.333333333333334"/>
+                                                    <rect key="frame" x="297.33333333333331" y="16" width="43.666666666666664" height="14.333333333333334"/>
                                                     <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -62,6 +62,9 @@
                                     <imageReference key="image" image="heart.fill" catalog="system" symbolScale="large"/>
                                     <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="30" scale="large" weight="bold"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="favButtonPressed:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="lEy-7b-I8d"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
@@ -79,6 +82,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="favButton" destination="fGD-Gg-Ahp" id="cuS-q3-TBw"/>
                         <outlet property="imageView" destination="e2o-xH-f86" id="TCz-cz-ysW"/>
                         <outlet property="tableView" destination="kZa-3e-E6Z" id="ZPC-Yp-TWA"/>
                     </connections>

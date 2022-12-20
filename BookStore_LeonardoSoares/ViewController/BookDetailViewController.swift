@@ -8,38 +8,60 @@
 import Foundation
 import UIKit
 
+protocol FavButtonDelegate: AnyObject {
+    func favoritedAction()
+}
+
 class BookDetailViewController: UIViewController {
     
     @IBOutlet weak var imageView: UIImageView!
     
     @IBOutlet weak var tableView: UITableView!
     
-    @IBOutlet weak var infoCell: UITableViewCell!
+    @IBOutlet weak var favButton: UIButton!
     
-    internal var viewModel: BookDetailViewModel?
+    weak var delegate: FavButtonDelegate?
+    
+    var viewModel: BookDetailViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         tableView.delegate = self
         tableView.dataSource = self
         
-        loadImage()
+        loadData()
     }
     
-    fileprivate func loadImage() {
+    fileprivate func loadData() {
         if let thumbURL = self.viewModel?.book?.volumeInfo.imageLinks?.thumbnail,
-        let URL = URL(string: thumbURL.replacingOccurrences(of: "http", with: "https")) {
-            self.viewModel?.getImage(from: URL) { image in
+           let URL = URL(string: thumbURL.replacingOccurrences(of: "http", with: "https")) {
+            self.viewModel?.getImage(from: URL) { [weak self] image in
                 DispatchQueue.main.async {
-                    self.imageView.image = image
+                    self?.imageView.image = image
                 }
             }
         }
+        
+        configureFavButton()
     }
     
     fileprivate func getNumberOfRows() -> Int {
         1
+    }
+    
+    fileprivate func configureFavButton() {
+        if let isFav = viewModel?.book?.isFav {
+            favButton.setImage(UIImage(systemName: "heart\(isFav ? ".fill" : "")"), for: .normal)
+        }
+    }
+    
+    @IBAction func favButtonPressed(_ sender: UIButton) {
+        if let bookID = viewModel?.book?.id, let isFav = viewModel?.book?.isFav {
+            UserDefaults.standard.setValue(!isFav, forKey: bookID)
+            sender.setImage(UIImage(systemName: "heart\(!isFav ? ".fill" : "")"), for: .normal)
+            self.delegate?.favoritedAction()
+        }
     }
 }
 
@@ -59,7 +81,10 @@ extension BookDetailViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 2 {
-            return 120.0
+            if viewModel?.book?.volumeInfo.description != nil {
+                return 120.0
+            }
+            return 0.0
         } else {
             return 43.5
         }
@@ -75,15 +100,15 @@ extension BookDetailViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "infoCell", for: indexPath)
         
         if indexPath.row == 0 {
-            cell.textLabel!.text = "Title"
+            cell.textLabel?.text = "Title"
             cell.detailTextLabel!.text =  viewModel?.book?.volumeInfo.title
         }
         if indexPath.row == 1 {
-            cell.textLabel!.text = "Author(s)"
+            cell.textLabel?.text = "Author(s)"
             cell.detailTextLabel!.text =  viewModel?.book?.volumeInfo.authors?.joined(separator: ", ")
         }
         if indexPath.row == 2 {
-            cell.textLabel!.text = viewModel?.book?.volumeInfo.description
+            cell.textLabel?.text = viewModel?.book?.volumeInfo.description
             cell.detailTextLabel!.text =  ""
         }
         if indexPath.row == 3 {
@@ -99,8 +124,8 @@ extension BookDetailViewController: UITableViewDataSource {
                 detail = ""
             }
             
-            cell.textLabel!.text = saleability
-            cell.detailTextLabel!.text = detail
+            cell.textLabel?.text = saleability
+            cell.detailTextLabel?.text = detail
         }
         return cell
     }
