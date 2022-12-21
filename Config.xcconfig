@@ -1,0 +1,11 @@
+//
+//  Config.xcconfig
+//  BookStore_LeonardoSoares
+//
+//  Created by Leonardo Soares on 17/12/22.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+API_KEY = AIzaSyBzYiQk_DRkU0mbe4x6R1d-3Ck8nD1vYjk
