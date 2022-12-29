@@ -21,8 +21,8 @@ class BookCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.imageView.image = UIImage.init(systemName: "text.book.closed")
-        self.titleLabel.text = ""
+        imageView.image = UIImage.init(systemName: "text.book.closed")
+        titleLabel.text = ""
     }
     
 }
