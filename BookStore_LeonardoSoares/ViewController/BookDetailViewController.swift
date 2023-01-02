@@ -34,8 +34,8 @@ class BookDetailViewController: UIViewController {
     }
     
     fileprivate func loadData() {
-        if let thumbURL = viewModel?.book?.volumeInfo.imageLinks?.thumbnail,
-           let URL = URL(string: thumbURL.replacingOccurrences(of: "http", with: "https")) {
+        if let thumbURL = viewModel?.book?.volumeInfo.imageLinks?.thumbnailURL,
+           let URL = URL(string: thumbURL) {
             self.viewModel?.getImage(from: URL) { [weak self] image, error in
                 if let errorToDisplay = error {
                     DispatchQueue.main.async {
