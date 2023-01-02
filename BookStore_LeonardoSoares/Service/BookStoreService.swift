@@ -13,7 +13,20 @@ struct GatheredData: Codable {
 }
 
 class BookStoreService {
+    
+    let sessionConfig: URLSessionConfiguration
+    let session: URLSession
+    
+    init() {
+        sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 5.0
+        sessionConfig.timeoutIntervalForResource = 10.0
+        session = URLSession(configuration: sessionConfig)
+    }
+    
+    
     public func getShelfData(at index: Int, result: @escaping (Result<[Book], Error>) -> ()) {
+        
         let queryItems: [URLQueryItem] = [
             URLQueryItem(name: "q", value: "ios"),
             URLQueryItem(name: "maxResults", value: "20"),
@@ -27,8 +40,13 @@ class BookStoreService {
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             request.httpMethod = "GET"
             
-            URLSession.shared.dataTask(with: request) { (data, response , error) in
-                guard let data = data else { return }
+            session.dataTask(with: request) { (data, response, error) in
+                guard let data = data else {
+                    if let error = error {                    
+                        result(.failure(error))
+                    }
+                    return
+                }
                 
                 do {
                     let results = try JSONDecoder().decode(GatheredData.self, from: data)
@@ -41,7 +59,7 @@ class BookStoreService {
     }
     
     func getImage(from url: URL, results: @escaping (Result<UIImage, Error>) -> ()) {
-            URLSession.shared.dataTask(with: url) { data, response, error in
+            session.dataTask(with: url) { data, response, error in
                 if let imageData = data, let result =  UIImage(data: imageData) {
                     results(.success(result))
                 }

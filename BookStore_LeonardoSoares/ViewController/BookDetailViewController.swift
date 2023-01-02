@@ -34,16 +34,30 @@ class BookDetailViewController: UIViewController {
     }
     
     fileprivate func loadData() {
-        if let thumbURL = self.viewModel?.book?.volumeInfo.imageLinks?.thumbnail,
+        if let thumbURL = viewModel?.book?.volumeInfo.imageLinks?.thumbnail,
            let URL = URL(string: thumbURL.replacingOccurrences(of: "http", with: "https")) {
-            self.viewModel?.getImage(from: URL) { [weak self] image in
-                DispatchQueue.main.async {
-                    self?.imageView.image = image
+            self.viewModel?.getImage(from: URL) { [weak self] image, error in
+                if let errorToDisplay = error {
+                    DispatchQueue.main.async {
+                        self?.alert(errorToDisplay)                        
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self?.imageView.image = image
+                    }
                 }
             }
         }
         
         configureFavButton()
+    }
+    
+    fileprivate func alert(_ error: Error) {
+        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self] action in
+            self?.loadData()
+        }))
+        present(alert, animated: true, completion: nil)
     }
     
     fileprivate func getNumberOfRows() -> Int {

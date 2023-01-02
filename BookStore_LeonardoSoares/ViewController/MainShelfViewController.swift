@@ -22,7 +22,7 @@ class MainShelfViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.prefersLargeTitles = true
         collectionView.register(UINib(nibName: "BookCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: BookCollectionViewCell.identifier)
         collectionView.register(UINib(nibName: "BookLargeCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: BookLargeCollectionViewCell.identifier)
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
@@ -36,23 +36,38 @@ class MainShelfViewController: UICollectionViewController {
     
     fileprivate func loadData() {
         SwiftSpinner.show("Loading")
-        self.isLoading = true
-        self.viewModel.loadData(pagination: paginationIndex) { [weak self] in
-            DispatchQueue.main.async {
-                self?.collectionView.reloadData()
-                self?.paginationIndex += 20
-                self?.isLoading = false
-                SwiftSpinner.hide()
+        isLoading = true
+        viewModel.loadData(pagination: paginationIndex) { [weak self] error in
+            guard let self = self else { return }
+            if let errorToDisplay = error {
+                DispatchQueue.main.async {
+                    self.alert(errorToDisplay)                    
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                    self.paginationIndex += 20
+                    self.isLoading = false
+                    SwiftSpinner.hide()
+                }
             }
         }
+    }
+    
+    fileprivate func alert(_ error: Error) {
+        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            self.loadData()
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func favorite(_ sender: Any) {
         if !isFilterActive {
             isFilterActive = true
-            paginationIndex = 0
             SwiftSpinner.show("Loading")
-            viewModel.filterFavorites(pagination: paginationIndex) { [weak self] in
+            viewModel.hasFilter = true
+            viewModel.loadData() { [weak self] error in
                 DispatchQueue.main.async {
                     self?.collectionView.reloadData()
                     self?.favButton.title = "Clear Filter"
@@ -64,6 +79,7 @@ class MainShelfViewController: UICollectionViewController {
             isFilterActive = false
             self.favButton.title = nil
             self.favButton.image = UIImage(systemName: "heart.fill")
+            viewModel.hasFilter = false
             loadData()
         }
     }
@@ -72,7 +88,7 @@ class MainShelfViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == (viewModel.numberOfSections - 1) {
-           return viewModel.numberOfItems % 2 == 0 ? 2 : 1
+            return viewModel.numberOfItems % 2 == 0 ? 2 : 1
         }
         
         return 2
@@ -86,14 +102,18 @@ class MainShelfViewController: UICollectionViewController {
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCollectionViewCell.identifier, for: indexPath) as? BookCollectionViewCell {
                 if let thumbURL = self.viewModel.getBook(for: indexPath)?.volumeInfo.imageLinks?.smallThumbnail,
                    let URL = URL(string: thumbURL.replacingOccurrences(of: "http", with: "https")) {
-                    self.viewModel.getImage(from: URL) { image in
-                        DispatchQueue.main.async {
-                            cell.imageView.image = image
+                    self.viewModel.getImage(from: URL) { [weak self] image, error in
+                        if let errorToDisplay = error {
+                            self?.alert(errorToDisplay)
+                        } else {
+                            DispatchQueue.main.async {
+                                cell.imageView.image = image
+                            }
                         }
                     }
                 }
                 
-                if let isFav = self.viewModel.getBook(for: indexPath)?.isFav {
+                if let isFav = viewModel.getBook(for: indexPath)?.isFav {
                     if isFav {
                         cell.favoriteButton.isHidden = false
                         cell.favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
@@ -102,22 +122,26 @@ class MainShelfViewController: UICollectionViewController {
                     }
                 }
                 
-                cell.titleLabel.text = self.viewModel.getBook(for: indexPath)?.volumeInfo.title
+                cell.titleLabel.text = viewModel.getBook(for: indexPath)?.volumeInfo.title
                 return cell
             }
             
         default:
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookLargeCollectionViewCell.identifier, for: indexPath) as? BookLargeCollectionViewCell {
-                if let thumbURL = self.viewModel.getBook(for: indexPath)?.volumeInfo.imageLinks?.smallThumbnail,
+                if let thumbURL = viewModel.getBook(for: indexPath)?.volumeInfo.imageLinks?.smallThumbnail,
                    let URL = URL(string: thumbURL.replacingOccurrences(of: "http", with: "https")) {
-                    self.viewModel.getImage(from: URL) { image in
-                        DispatchQueue.main.async {
-                            cell.imageView.image = image
+                    viewModel.getImage(from: URL) { [weak self] image, error in
+                        if let errorToDisplay = error {
+                            self?.alert(errorToDisplay)
+                        } else {
+                            DispatchQueue.main.async {
+                                cell.imageView.image = image
+                            }
                         }
                     }
                 }
                 
-                if let isFav = self.viewModel.getBook(for: indexPath)?.isFav {
+                if let isFav = viewModel.getBook(for: indexPath)?.isFav {
                     if isFav {
                         cell.favoriteButton.isHidden = false
                         cell.favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
@@ -126,7 +150,7 @@ class MainShelfViewController: UICollectionViewController {
                     }
                 }
                 
-                cell.titleLabel.text = self.viewModel.getBook(for: indexPath)?.volumeInfo.title
+                cell.titleLabel.text = viewModel.getBook(for: indexPath)?.volumeInfo.title
                 return cell
             }
         }
@@ -135,17 +159,17 @@ class MainShelfViewController: UICollectionViewController {
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        self.viewModel.numberOfSections
+        viewModel.numberOfSections
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.section == self.viewModel.numberOfSections - 1, !isLoading, !isFilterActive {
+        if indexPath.section == viewModel.numberOfSections - 1, !isLoading, !isFilterActive {
             self.loadData()
         }
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let vc = self.viewModel.buildViewController(for: indexPath) {
+        if let vc = viewModel.buildViewController(for: indexPath) {
             vc.delegate = self
             self.navigationController?.present(vc, animated: true)
         }

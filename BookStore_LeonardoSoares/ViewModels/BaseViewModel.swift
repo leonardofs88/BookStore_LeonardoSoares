@@ -16,13 +16,13 @@ class BaseViewModel {
         self.service = service
     }
     
-     func getImage(from URL: URL, block: @escaping (UIImage) -> () ){
+     func getImage(from URL: URL, block: @escaping (UIImage?, Error?) -> () ){
         self.service.getImage(from: URL) { result in
             switch result {
             case .success(let image):
-                block(image)
+                block(image, nil)
             case .failure(let error):
-                print(error)
+                block(nil, error)
             }
         }
     }
